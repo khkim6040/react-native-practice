@@ -1,31 +1,24 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 const App = (): React.JSX.Element => {
-
   const [input, setInput] = React.useState('0');
 
   const handlePress = (value: string) => {
-    setInput(prev => prev + value);
+    setInput(prev => (prev === '0' ? value : prev + value));
   };
 
   const calculate = () => {
     try {
       setInput(eval(input).toString());
     } catch (error) {
-      setInput('Error');
+      setInput('');
     }
   };
 
@@ -43,65 +36,55 @@ const App = (): React.JSX.Element => {
       <View style={styles.buttonsContainer}>
         {/* Row 1 */}
         <View style={styles.row}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('7')}>7</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('8')}>8</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('9')}>9</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('/')}>/</Text>
-          </View>
+          {['7', '8', '9', '/'].map(item => (
+            <TouchableOpacity
+              key={item}
+              style={styles.button}
+              onPress={() => handlePress(item)}>
+              <Text style={styles.buttonText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
         {/* Row 2 */}
         <View style={styles.row}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('4')}>4</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('5')}>5</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('6')}>6</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('*')}>*</Text>
-          </View>
+          {['4', '5', '6', '*'].map(item => (
+            <TouchableOpacity
+              key={item}
+              style={styles.button}
+              onPress={() => handlePress(item)}>
+              <Text style={styles.buttonText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
         {/* Row 3 */}
         <View style={styles.row}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('1')}>1</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('2')}>2</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('3')}>3</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('-')}>-</Text>
-          </View>
+          {['1', '2', '3', '-'].map(item => (
+            <TouchableOpacity
+              key={item}
+              style={styles.button}
+              onPress={() => handlePress(item)}>
+              <Text style={styles.buttonText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
         {/* Row 4 */}
         <View style={styles.row}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('0')}>0</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={clear} >C</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={calculate}>=</Text>
-          </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handlePress('+')}>+</Text>
-          </View>
+          {['0', 'C', '=', '+'].map(item => (
+            <TouchableOpacity
+              key={item}
+              style={styles.button}
+              onPress={
+                item === 'C'
+                  ? clear
+                  : item === '='
+                  ? calculate
+                  : () => handlePress(item)
+              }>
+              <Text style={styles.buttonText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        </View>
+      </View>
     </SafeAreaView>
   );
 };
