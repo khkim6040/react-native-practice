@@ -5,6 +5,9 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 const App = (): React.JSX.Element => {
@@ -30,7 +33,17 @@ const App = (): React.JSX.Element => {
     <SafeAreaView style={styles.container}>
       {/* Display */}
       <View style={styles.display}>
-        <Text style={styles.displayText}>{input}</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TextInput
+          style={styles.displayText}
+          value={input}
+          onChangeText={text => setInput(text)} // Update input when typing
+          keyboardType="numeric" // Open numeric keyboard by default
+          placeholder="0"
+          placeholderTextColor="#999"
+          maxLength={20} // Optional: Limit max input length
+        />
+        </TouchableWithoutFeedback>
       </View>
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
@@ -109,6 +122,8 @@ const styles = StyleSheet.create({
   displayText: {
     fontSize: 36,
     color: '#333',
+    textAlign: 'right',
+    width: '100%',
   },
   buttonsContainer: {
     width: '90%',
