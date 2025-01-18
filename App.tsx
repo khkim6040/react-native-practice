@@ -6,19 +6,33 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  TouchableWithoutFeedback,
   Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 const App = (): React.JSX.Element => {
   const [input, setInput] = React.useState('0');
+  const [lastKey, setLastKey] = React.useState('');
+
+  // Function to handle key presses (e.g., numbers, operators)
+  const handleKeyPress = (event: any) => {
+    const { key } = event.nativeEvent;
+    setLastKey(key);
+    if (key === 'Backspace') {
+      setInput(prev => prev.slice(0, -1) || '0');
+    } else if (/^[0-9+\-*/.]$/.test(key)) {
+      setInput(prev => (prev === '0' ? key : prev + key));
+    }
+  };
 
   const handlePress = (value: string) => {
+    setLastKey(value);
     setInput(prev => (prev === '0' ? value : prev + value));
   };
 
   const calculate = () => {
     try {
+      setLastKey('=');
       setInput(eval(input).toString());
     } catch (error) {
       setInput('');
@@ -26,25 +40,28 @@ const App = (): React.JSX.Element => {
   };
 
   const clear = () => {
-    setInput('');
+    setLastKey('C');
+    setInput('0');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Display */}
-      <View style={styles.display}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <TextInput
-          style={styles.displayText}
-          value={input}
-          onChangeText={text => setInput(text)} // Update input when typing
-          keyboardType="numeric" // Open numeric keyboard by default
-          placeholder="0"
-          placeholderTextColor="#999"
-          maxLength={20} // Optional: Limit max input length
-        />
-        </TouchableWithoutFeedback>
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.display}>
+          <TextInput
+            style={styles.displayText}
+            value={input}
+            onChangeText={text => setInput(text)} // Update input when typing
+            onKeyPress={handleKeyPress} // Handle keyboard inputs
+            onSubmitEditing={calculate} // Handle "Enter" key
+            keyboardType="numeric" // Allows all characters
+            placeholder="0"
+            maxLength={20} // Optional: Limit max input length
+            blurOnSubmit={false} // Prevent keyboard from dismissing
+          />
+        </View>
+      </TouchableWithoutFeedback>
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
         {/* Row 1 */}
@@ -96,6 +113,12 @@ const App = (): React.JSX.Element => {
               <Text style={styles.buttonText}>{item}</Text>
             </TouchableOpacity>
           ))}
+        </View>
+        {/* Row 5 */}
+        <View style={styles.row}>
+          <Text style={{ color: '#999', fontSize: 12 }}>
+            마지막으로 선택한 키: {lastKey}
+          </Text>
         </View>
       </View>
     </SafeAreaView>
