@@ -6,112 +6,147 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = (): React.JSX.Element => {
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const [input, setInput] = React.useState('0');
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  const handlePress = (value: string) => {
+    setInput(prev => prev + value);
+  };
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const calculate = () => {
+    try {
+      setInput(eval(input).toString());
+    } catch (error) {
+      setInput('Error');
+    }
+  };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const clear = () => {
+    setInput('');
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView style={styles.container}>
+      {/* Display */}
+      <View style={styles.display}>
+        <Text style={styles.displayText}>{input}</Text>
+      </View>
+      {/* Buttons */}
+      <View style={styles.buttonsContainer}>
+        {/* Row 1 */}
+        <View style={styles.row}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('7')}>7</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('8')}>8</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('9')}>9</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('/')}>/</Text>
+          </View>
         </View>
-      </ScrollView>
+        {/* Row 2 */}
+        <View style={styles.row}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('4')}>4</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('5')}>5</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('6')}>6</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('*')}>*</Text>
+          </View>
+        </View>
+        {/* Row 3 */}
+        <View style={styles.row}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('1')}>1</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('2')}>2</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('3')}>3</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('-')}>-</Text>
+          </View>
+        </View>
+        {/* Row 4 */}
+        <View style={styles.row}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('0')}>0</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={clear} >C</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={calculate}>=</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.buttonText} onPress={() => handlePress('+')}>+</Text>
+          </View>
+        </View>
+        </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionTitle: {
+  display: {
+    backgroundColor: '#e6e6e6',
+    width: '90%',
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+  displayText: {
+    fontSize: 36,
+    color: '#333',
+  },
+  buttonsContainer: {
+    width: '90%',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#dcdcdc',
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
     fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
 
